@@ -11,8 +11,10 @@ function addToCart(id, name, price) {
     let existingItem = cart.find(item => item.id === id);
     if (existingItem) {
         existingItem.quantity += 1;
+        if (window.showToast) showToast(`Updated: ${name} (×${existingItem.quantity})`, 'info');
     } else {
         cart.push({ id, name, price, quantity: 1 });
+        if (window.showToast) showToast(`Added "${name}" to cart`, 'success');
     }
     saveCart();
 }
@@ -37,26 +39,26 @@ function changeQuantity(id, delta) {
 function updateCartUI() {
     let cartContainer = document.getElementById('cart-items');
     let totalContainer = document.getElementById('cart-total');
-    
+
     if (!cartContainer || !totalContainer) return;
-    
+
     cartContainer.innerHTML = '';
     let total = 0;
-    
+
     if (cart.length === 0) {
         cartContainer.innerHTML = '<p style="color: #888; font-size: 0.9em; font-style: italic;">Your cart is empty.</p>';
     }
-    
+
     cart.forEach(item => {
         let itemTotal = item.price * item.quantity;
         total += itemTotal;
-        
+
         // Create item UI
         let itemDiv = document.createElement('div');
         itemDiv.style.marginBottom = '10px';
         itemDiv.style.paddingBottom = '10px';
         itemDiv.style.borderBottom = '1px dashed #eee';
-        
+
         itemDiv.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 5px;">
                 <span style="font-weight: bold; font-size: 0.9em;">${item.name}</span>
@@ -73,7 +75,7 @@ function updateCartUI() {
         `;
         cartContainer.appendChild(itemDiv);
     });
-    
+
     totalContainer.innerText = total.toFixed(2);
 
     // Add Checkout Button if cart is not empty
@@ -89,7 +91,7 @@ function updateCartUI() {
         checkoutBtn.style.cursor = 'pointer';
         checkoutBtn.style.borderRadius = '5px';
         checkoutBtn.style.fontWeight = 'bold';
-        checkoutBtn.onclick = function() { checkout(); };
+        checkoutBtn.onclick = function () { checkout(); };
         cartContainer.appendChild(checkoutBtn);
     }
 }
