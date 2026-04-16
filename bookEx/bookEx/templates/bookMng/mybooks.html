@@ -22,7 +22,11 @@
           <th>
               User Name
           </th>
-
+          {% if user.is_authenticated %}
+          <th>
+              Action
+          </th>
+          {% endif %}
           <th>
               DELETE
           </th>
@@ -41,7 +45,11 @@
           <td>
             {{ book.username }}
          </td>
-
+         {% if user.is_authenticated %}
+         <td>
+            <button onclick="addToCart('{{ book.id }}', '{{ book.name|escapejs }}', '{{ book.price }}')" style="cursor:pointer;  border: none; background: #4CAF50; color: white; border-radius: 3px;">Add to Cart</button>
+         </td>
+         {% endif %}
 
        <td>
         <a href="book_delete/{{ book.id }}">  <img src="{% static 'delete_button.jpg' %}" width="100" />
