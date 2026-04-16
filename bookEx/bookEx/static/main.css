@@ -1,68 +1,443 @@
-/* Reset some default browser styles */
+/* ============================================
+   PREMIUM BOOKEX STYLING
+   ============================================ */
+
+:root {
+    --primary-color: #1a3a52;
+    --secondary-color: #d4a574;
+    --accent-color: #2c5aa0;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --border-color: #e0e0e0;
+    --success-color: #27ae60;
+}
+
+/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Page layout */
+html,
 body {
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
 }
 
-/* Banner */
-.banner {
-    background-color: #2c3e50;
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ============================================
+   PREMIUM NAVIGATION BAR
+   ============================================ */
+
+.premium-navbar {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+}
+
+.premium-navbar .navbar-brand {
+    font-size: 1.8rem;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.premium-navbar .navbar-brand:hover {
+    transform: scale(1.05);
+    color: var(--secondary-color) !important;
+}
+
+.premium-navbar .nav-link {
+    margin: 0 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.premium-navbar .nav-link:hover {
+    color: var(--secondary-color) !important;
+}
+
+.premium-navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--secondary-color);
+    transition: width 0.3s ease;
+}
+
+.premium-navbar .nav-link:hover::after {
+    width: 100%;
+}
+
+.premium-navbar .dropdown-menu {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.premium-navbar .dropdown-item {
     color: white;
-    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.premium-navbar .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding-left: 1.5rem;
+}
+
+/* ============================================
+   MAIN WRAPPER
+   ============================================ */
+
+.main-wrapper {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+/* ============================================
+   PREMIUM SIDEBAR
+   ============================================ */
+
+.premium-sidebar {
+    padding: 0 1rem;
+}
+
+.sidebar-content {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 20px;
+}
+
+.sidebar-title {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--secondary-color);
+    font-size: 1.1rem;
+}
+
+.sidebar-content .nav-link {
+    color: var(--dark-text);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    position: relative;
+    padding-left: 2rem;
+}
+
+.sidebar-content .nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 0;
+    background-color: var(--secondary-color);
+    border-radius: 2px;
+    transition: height 0.3s ease;
+}
+
+.sidebar-content .nav-link:hover {
+    background-color: var(--light-bg);
+    color: var(--accent-color);
+}
+
+.sidebar-content .nav-link:hover::before {
+    height: 20px;
+}
+
+/* Shopping Cart Card */
+.cart-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cart-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 0.75rem;
+}
+
+.cart-items-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.cart-item {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-footer {
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    padding-top: 1rem;
+}
+
+.cart-total {
+    font-size: 1.2rem;
+    font-weight: 700;
     text-align: center;
 }
 
-/* Main container (sidebar + content) */
-.container {
-    flex: 1;
-    display: flex;
+/* ============================================
+   PREMIUM CONTENT AREA
+   ============================================ */
+
+.premium-content {
+    padding: 0 1rem;
 }
 
-/* Sidebar */
-.sidebar {
-    width: 200px;
-    background-color: #ecf0f1;
-    padding: 20px;
+.premium-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-weight: 700;
 }
 
-.sidebar ul {
-    list-style: none;
+.premium-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    margin-top: 2rem;
 }
 
-.sidebar li {
-    margin-bottom: 15px;
+.premium-content h3 {
+    color: var(--accent-color);
+    font-weight: 600;
+    margin-bottom: 1rem;
 }
 
-.sidebar a {
+/* ============================================
+   PREMIUM CARDS
+   ============================================ */
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ============================================
+   PREMIUM BUTTONS
+   ============================================ */
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(26, 58, 82, 0.3);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #c49563;
+    transform: translateY(-2px);
+}
+
+.btn-outline-light {
+    border: 2px solid white;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background-color: white;
+    color: var(--primary-color);
+}
+
+/* ============================================
+   PREMIUM FORMS
+   ============================================ */
+
+.form-control,
+.form-select {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.15);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   PREMIUM FOOTER
+   ============================================ */
+
+.premium-footer {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+    padding: 3rem 0 1rem;
+    margin-top: auto;
+}
+
+.premium-footer h6 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.premium-footer p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.premium-footer a {
+    color: var(--secondary-color);
     text-decoration: none;
-    color: #2c3e50;
-    font-weight: bold;
+    transition: all 0.3s ease;
 }
 
-.sidebar a:hover {
+.premium-footer a:hover {
+    color: white;
     text-decoration: underline;
 }
 
-/* Main content */
-.content {
-    flex: 1;
-    padding: 20px;
-    background-color: #ffffff;
+.premium-footer ul li {
+    margin-bottom: 0.5rem;
 }
 
-/* Footer */
-.footer {
-    background-color: #2c3e50;
-    color: white;
+.social-links a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
     text-align: center;
-    padding: 10px;
+    line-height: 40px;
+    margin-right: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    .premium-navbar .navbar-brand {
+        font-size: 1.5rem;
+    }
+
+    .premium-content h1 {
+        font-size: 2rem;
+    }
+
+    .sidebar-content {
+        position: static;
+        margin-bottom: 2rem;
+    }
+
+    .premium-footer {
+        padding: 2rem 0 1rem;
+    }
+
+    .premium-footer h6 {
+        font-size: 1rem;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-secondary {
+    color: var(--secondary-color) !important;
+}
+
+.bg-light-custom {
+    background-color: var(--light-bg);
+}
+
+.shadow-premium {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.rounded-premium {
+    border-radius: 12px !important;
 }

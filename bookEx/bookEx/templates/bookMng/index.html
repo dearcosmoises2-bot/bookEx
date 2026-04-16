@@ -2,13 +2,152 @@
 {% load static %}
 
 {% block sidenav %}
-   {% for item in item_list %}
-      <li>
-        <a href="{{ item.link }}">  {{ item.item }} </a>
-      </li>
-   {% endfor %}
+{% for item in item_list %}
+<li class="nav-item">
+   <a class="nav-link" href="{{ item.link }}">
+      <i class="fas fa-link"></i> {{ item.item }}
+   </a>
+</li>
+{% endfor %}
 {% endblock sidenav %}
 
 {% block content %}
-   <h1>Welcome to Book Exchange System</h1>
+<!-- Hero Section -->
+<div class="hero-section mb-5">
+   <div class="hero-content">
+      <h1 class="hero-title">
+         <i class="fas fa-book-open"></i> Welcome to BookEx
+      </h1>
+      <p class="hero-subtitle">
+         Your Premium Platform for Buying and Selling Books
+      </p>
+      {% if not user.is_authenticated %}
+      <div class="hero-buttons">
+         <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-2">
+            <i class="fas fa-sign-in-alt"></i> Login
+         </a>
+         <a href="/register" class="btn btn-secondary btn-lg">
+            <i class="fas fa-user-plus"></i> Register
+         </a>
+      </div>
+      {% else %}
+      <p class="hero-welcome">Welcome back, <strong>{{ user.username }}</strong>!</p>
+      {% endif %}
+   </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mb-5">
+   <div class="col-md-4 mb-3">
+      <div class="card feature-card">
+         <div class="card-body text-center">
+            <i class="fas fa-search feature-icon"></i>
+            <h5 class="card-title mt-3">Browse Books</h5>
+            <p class="card-text">Discover thousands of books from sellers worldwide.</p>
+         </div>
+      </div>
+   </div>
+   <div class="col-md-4 mb-3">
+      <div class="card feature-card">
+         <div class="card-body text-center">
+            <i class="fas fa-shopping-cart feature-icon"></i>
+            <h5 class="card-title mt-3">Easy Shopping</h5>
+            <p class="card-text">Add books to cart and checkout securely.</p>
+         </div>
+      </div>
+   </div>
+   <div class="col-md-4 mb-3">
+      <div class="card feature-card">
+         <div class="card-body text-center">
+            <i class="fas fa-star feature-icon"></i>
+            <h5 class="card-title mt-3">Ratings & Reviews</h5>
+            <p class="card-text">Read reviews and rate books you've purchased.</p>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- Call to Action -->
+{% if user.is_authenticated %}
+<div class="cta-section">
+   <h2>Ready to Find Your Next Book?</h2>
+   <p>Browse our collection or post your own books for sale.</p>
+   <a href="/displaybooks" class="btn btn-primary btn-lg me-2">
+      <i class="fas fa-book"></i> Browse Books
+   </a>
+   <a href="/postbook" class="btn btn-secondary btn-lg">
+      <i class="fas fa-plus"></i> Post a Book
+   </a>
+</div>
+{% endif %}
+
+<style>
+   .hero-section {
+      background: linear-gradient(135deg, #1a3a52 0%, #2c5aa0 100%);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+   }
+
+   .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+   }
+
+   .hero-subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+   }
+
+   .hero-welcome {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+   }
+
+   .hero-buttons {
+      margin-top: 2rem;
+   }
+
+   .feature-card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+   }
+
+   .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+   }
+
+   .feature-icon {
+      font-size: 3rem;
+      color: #2c5aa0;
+   }
+
+   .cta-section {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e8ecf1 100%);
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      border: 2px solid #d4a574;
+   }
+
+   .cta-section h2 {
+      color: #1a3a52;
+      margin-bottom: 1rem;
+   }
+
+   .cta-section p {
+      color: #2c3e50;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+   }
+</style>
 {% endblock content %}

@@ -2,27 +2,78 @@
 {% load static %}
 
 {% block sidenav %}
-      <li>
-        <a href="/">  Home </a>
-      </li>
+<li class="nav-item">
+  <a class="nav-link" href="/">
+    <i class="fas fa-home"></i> Home
+  </a>
+</li>
 {% endblock sidenav %}
 
 {% block content %}
-  <h1>User Login</h1>
-    <form action="{% url 'login' %}" method="post">
-      <table>
-         {{ form.as_table }}
-          <tr>
-             <td>
-                 <input type="submit" value="login">
-             </td>
-          </tr>
-      </table>
-        <p>
-            To register <a href="/register"> Click Here</a>
-        </p>
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-premium">
+      <div class="card-header">
+        <h3 class="mb-0">
+          <i class="fas fa-sign-in-alt"></i> User Login
+        </h3>
+      </div>
+      <div class="card-body">
+        <form action="{% url 'login' %}" method="post">
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Login Failed!</strong>
+            {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+          {% endif %}
 
-      <input type="hidden" name="next" value="{{ next }}" />
-      {% csrf_token %}
-     </form>
+          <div class="mb-3">
+            <label for="{{ form.username.id_for_label }}" class="form-label">
+              <i class="fas fa-user"></i> Username
+            </label>
+            {{ form.username }}
+            {% if form.username.errors %}
+            <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ form.password.id_for_label }}" class="form-label">
+              <i class="fas fa-lock"></i> Password
+            </label>
+            {{ form.password }}
+            {% if form.password.errors %}
+            <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mb-3">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+
+          <input type="hidden" name="next" value="{{ next }}" />
+          {% csrf_token %}
+        </form>
+
+        <hr>
+        <p class="text-center mb-0">
+          Don't have an account?
+          <a href="/register" class="text-decoration-none fw-bold">
+            <i class="fas fa-user-plus"></i> Register Here
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #id_username,
+  #id_password {
+    width: 100%;
+  }
+</style>
 {% endblock content %}

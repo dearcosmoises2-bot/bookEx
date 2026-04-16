@@ -1,70 +1,144 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Simple Layout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookEx - Premium Book Exchange</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
     <link href="{% static 'main.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{% static 'table_format.css' %}" type="text/css" />
-    <link rel="stylesheet" href="{% static 'message_box.css' %}"/>
+    <link rel="stylesheet" href="{% static 'message_box.css' %}" />
 </head>
+
 <body>
 
-    <!-- Top Banner -->
-    <header class="banner">
-        <h1>Website Banner</h1>
-    </header>
-
-    <!-- Main Layout -->
-    <div class="container">
-
-        <!-- Left Menu -->
-        <nav class="sidebar">
-            <ul>
-                {% block sidenav %}
-                    Menu Items
-                {% endblock sidenav %}
-            </ul>
-            {% if user.is_authenticated %}
-            <div id="cart-section">
-                <h3>Shopping Cart</h3>
-                <div id="cart-items"></div>
-                <div class="cart-total">
-                    Total: $<span id="cart-total">0.00</span>
+    <!-- Premium Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark premium-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-book-open"></i> BookEx
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                </ul>
+                <div class="ms-3">
+                    {% if user.is_authenticated %}
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> {{ user.username }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/mybooks">My Books</a></li>
+                            <li><a class="dropdown-item" href="/inbox">Messages</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form action="{% url 'logout' %}?next=/" method="post" class="d-inline">
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                    {% csrf_token %}
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'login' %}?next=/" class="btn btn-light btn-sm me-2">Login</a>
+                    <a href="/register" class="btn btn-outline-light btn-sm">Register</a>
+                    {% endif %}
                 </div>
             </div>
-            <script src="{% static 'cart.js' %}"></script>
-            {% endif %}
-        </nav>
+        </div>
+    </nav>
 
-        <!-- Right Main Content -->
-    <main class="content">
-            {% block content %}
-               <h1>Main Content</h1>
-            {% endblock content %}
-        </main>
+    <!-- Main Layout -->
+    <div class="main-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Left Sidebar -->
+                <nav class="col-lg-3 col-md-4 premium-sidebar">
+                    <div class="sidebar-content">
+                        <h5 class="sidebar-title">
+                            <i class="fas fa-compass"></i> Navigation
+                        </h5>
+                        <ul class="nav flex-column">
+                            {% block sidenav %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Menu Items</a>
+                            </li>
+                            {% endblock sidenav %}
+                        </ul>
 
+                        {% if user.is_authenticated %}
+                        <div class="cart-card mt-4">
+                            <h6 class="cart-title">
+                                <i class="fas fa-shopping-cart"></i> Shopping Cart
+                            </h6>
+                            <div id="cart-items" class="cart-items-list"></div>
+                            <div class="cart-footer">
+                                <div class="cart-total">
+                                    Total: $<span id="cart-total">0.00</span>
+                                </div>
+                                <button class="btn btn-sm btn-primary w-100 mt-2">Checkout</button>
+                            </div>
+                        </div>
+                        <script src="{% static 'cart.js' %}"></script>
+                        {% endif %}
+                    </div>
+                </nav>
+
+                <!-- Main Content -->
+                <main class="col-lg-9 col-md-8 premium-content">
+                    {% block content %}
+                    <h1>Main Content</h1>
+                    {% endblock content %}
+                </main>
+            </div>
+        </div>
     </div>
 
-    <span style="float: right;">
-            {% if user.is_authenticated %}
-               {{ user.username}}
-               <form action="{% url 'logout' %}?next=/" method="post">
-                   <button type="submit">logout</button>
-                   {% csrf_token %}
-               </form>
-            {% else %}
-               Not Logged in
-               <a href="{% url 'login' %}?next=/">login</a>
-            {% endif %}
-        </span>
-
-    <!-- Bottom Footer -->
-    <footer class="footer">
-        <p>&copy; 2026 Your Company Name. All rights reserved.</p>
+    <!-- Premium Footer -->
+    <footer class="premium-footer mt-5">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <h6>About BookEx</h6>
+                    <p>Your premium platform for buying and selling books online.</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>Follow Us</h6>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center mb-0">&copy; 2026 BookEx. All rights reserved.</p>
+        </div>
     </footer>
 
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
+
 </html>
