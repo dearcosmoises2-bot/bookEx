@@ -358,3 +358,24 @@ def delete_review(request: HttpRequest, book_id: int) -> HttpResponse:
     review = get_object_or_404(BookReview, book=book, user=request.user)
     review.delete()
     return redirect("book_detail", book_id=book.id)
+
+def aboutus(request):
+    return render(request,
+                  'bookMng/aboutus.html',
+                  {
+                      'item_list': MainMenu.objects.all(),
+                  })
+
+def searchbooks(request):
+    return render(request,
+                  'bookMng/searchbooks.html',
+                  {
+                      'item_list': MainMenu.objects.all(),
+                  })
+
+def checkout_success(request):
+    return render(request,
+                  'bookMng/checkout_success.html',
+                  {
+                      'item_list': MainMenu.objects.all(),
+                  })

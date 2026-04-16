@@ -14,7 +14,7 @@
     <table class="professional-table">
       <thead>
         <tr class="table-title-row">
-          <th colspan="5">Display Books</th>
+          <th colspan="6">Display Books</th>
         </tr>
         <tr>
           <th>Book Name</th>
@@ -22,6 +22,11 @@
           <th>User Name</th>
           <th>Post Date</th>
           <th>Avg Rating</th>
+          {% if user.is_authenticated %}
+          <th>
+              Action
+          </th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -32,6 +37,10 @@
           <td>{{ book.username }}</td>
           <td>{{ book.publishdate }}</td>
           <td>{{ book.avg_rating|floatformat:1|default:"No ratings yet" }}</td>
+          {% if user.is_authenticated %}
+          <td><button  onclick="addToCart('{{ book.id }}', '{{ book.name|escapejs }}', '{{ book.price }}')" style="cursor:pointer;  border: none; background: #4CAF50; color: white; border-radius: 3px;">Add to Cart</button>
+          </td>
+          {% endif %}
         </tr>
          {% endfor %}
       </tbody>
