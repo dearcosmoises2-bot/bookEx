@@ -12,6 +12,8 @@ urlpatterns = [
     path("compose/", views.compose_message, name="compose_message"),
     path("thread/<int:thread_id>/", views.thread_detail, name="thread_detail"),
     path("thread/<int:thread_id>/mark-read/", views.mark_thread_read, name="mark_thread_read"),
-
+    path('book_detail/<int:book_id>/review/submit', views.submit_review, name='submit_review'),
+    path('book_detail/<int:book_id>/review/edit', views.edit_review, name='edit_review'),
+    path('book_detail/<int:book_id>/review/delete', views.delete_review, name='delete_review'),
 ]
 

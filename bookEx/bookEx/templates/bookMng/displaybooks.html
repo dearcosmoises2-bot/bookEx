@@ -14,13 +14,14 @@
     <table class="professional-table">
       <thead>
         <tr class="table-title-row">
-          <th colspan="4">Display Books</th>
+          <th colspan="5">Display Books</th>
         </tr>
         <tr>
           <th>Book Name</th>
           <th>Book Price</th>
           <th>User Name</th>
           <th>Post Date</th>
+          <th>Avg Rating</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +31,7 @@
           <td>{{ book.price }}</td>
           <td>{{ book.username }}</td>
           <td>{{ book.publishdate }}</td>
+          <td>{{ book.avg_rating|floatformat:1|default:"No ratings yet" }}</td>
         </tr>
          {% endfor %}
       </tbody>

@@ -53,4 +53,54 @@
            </td>
       </tr>
    </table>
+
+   <hr>
+   <h2>Reviews</h2>
+
+   {% if reviews %}
+      {% for review in reviews %}
+         <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <strong>{{ review.user.username }}</strong>
+            &mdash;
+            {% with review.rating as r %}
+               {% if r == 1 %}★☆☆☆☆
+               {% elif r == 2 %}★★☆☆☆
+               {% elif r == 3 %}★★★☆☆
+               {% elif r == 4 %}★★★★☆
+               {% else %}★★★★★
+               {% endif %}
+            {% endwith %}
+            ({{ review.rating }}/5)
+            <br>
+            <p>{{ review.comment }}</p>
+            <small>{{ review.created_at|date:"Y-m-d H:i" }}</small>
+
+            {% if user.is_authenticated and user == review.user %}
+               <br>
+               <form action="{% url 'edit_review' book.id %}" method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit">Edit</button>
+               </form>
+               <form action="{% url 'delete_review' book.id %}" method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" onclick="return confirm('Delete this review?');">Delete</button>
+               </form>
+            {% endif %}
+         </div>
+      {% endfor %}
+   {% else %}
+      <p>No reviews yet.</p>
+   {% endif %}
+
+   {% if user.is_authenticated %}
+      <h3>{% if user_review %}Edit Your Review{% else %}Leave a Review{% endif %}</h3>
+      <form action="{% url 'submit_review' book.id %}" method="post">
+         {% csrf_token %}
+         {{ form.as_p }}
+         <button type="submit">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
+      </form>
+   {% else %}
+      <p>Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to leave a review.</p>
+   {% endif %}
+
 {% endblock content %}

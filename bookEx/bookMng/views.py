@@ -3,6 +3,7 @@ from .models import Book
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.db.models import Avg
 # Create your views here.
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -52,7 +53,7 @@ def postbook(request):
 
 
 def displaybooks(request):
-    books = Book.objects.all()
+    books = Book.objects.annotate(avg_rating=Avg("reviews__rating"))
     for b in books:
         b.pic_path = b.picture.url[14:]
     return render(request,
@@ -73,14 +74,26 @@ class Register(CreateView):
         return HttpResponseRedirect(self.success_url)
 
 def book_detail(request, book_id):
-    book = Book.objects.get(id=book_id)
-
+    book = get_object_or_404(Book, id=book_id)
     book.pic_path = book.picture.url[14:]
+
+    reviews = BookReview.objects.filter(book=book).order_by("-created_at")
+
+    if request.user.is_authenticated:
+        user_review = BookReview.objects.filter(book=book, user=request.user).first()
+    else:
+        user_review = None
+
+    form = BookReviewForm(instance=user_review)
+
     return render(request,
                   'bookMng/book_detail.html',
                   {
                       'item_list': MainMenu.objects.all(),
-                      'book': book
+                      'book': book,
+                      'reviews': reviews,
+                      'user_review': user_review,
+                      'form': form,
                   })
 
 def mybooks(request):
@@ -112,7 +125,8 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
-from .models import MessageThread, PrivateMessage
+from .models import MessageThread, PrivateMessage, BookReview
+from .forms import BookReviewForm
 
 User = get_user_model()
 
@@ -268,3 +282,79 @@ def mark_thread_read(request: HttpRequest, thread_id: int) -> HttpResponse:
 
     messages.success(request, "Thread marked as read.")
     return redirect("thread_detail", thread_id=thread.id)
+
+
+@login_required
+@require_POST
+def submit_review(request: HttpRequest, book_id: int) -> HttpResponse:
+    book = get_object_or_404(Book, pk=book_id)
+    form = BookReviewForm(request.POST)
+
+    if not form.is_valid():
+        reviews = BookReview.objects.filter(book=book)
+        user_review = reviews.filter(user=request.user).first()
+        try:
+            pic_path = book.picture.url[14:]
+        except Exception:
+            pic_path = ""
+        return render(
+            request,
+            "bookMng/book_detail.html",
+            {
+                "item_list": MainMenu.objects.all(),
+                "book": book,
+                "reviews": reviews,
+                "user_review": user_review,
+                "form": form,
+                "pic_path": pic_path,
+            },
+        )
+
+    BookReview.objects.update_or_create(
+        book=book,
+        user=request.user,
+        defaults={
+            "rating": form.cleaned_data["rating"],
+            "comment": form.cleaned_data["comment"],
+        },
+    )
+    return redirect("book_detail", book_id=book.id)
+
+
+@login_required
+@require_POST
+def edit_review(request: HttpRequest, book_id: int) -> HttpResponse:
+    book = get_object_or_404(Book, pk=book_id)
+    review = get_object_or_404(BookReview, book=book, user=request.user)
+    form = BookReviewForm(request.POST, instance=review)
+
+    if not form.is_valid():
+        reviews = BookReview.objects.filter(book=book)
+        try:
+            pic_path = book.picture.url[14:]
+        except Exception:
+            pic_path = ""
+        return render(
+            request,
+            "bookMng/book_detail.html",
+            {
+                "item_list": MainMenu.objects.all(),
+                "book": book,
+                "reviews": reviews,
+                "user_review": review,
+                "form": form,
+                "pic_path": pic_path,
+            },
+        )
+
+    form.save()
+    return redirect("book_detail", book_id=book.id)
+
+
+@login_required
+@require_POST
+def delete_review(request: HttpRequest, book_id: int) -> HttpResponse:
+    book = get_object_or_404(Book, pk=book_id)
+    review = get_object_or_404(BookReview, book=book, user=request.user)
+    review.delete()
+    return redirect("book_detail", book_id=book.id)
