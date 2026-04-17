@@ -1,0 +1,70 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Layout</title>
+    <link href="{% static 'main.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'table_format.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'message_box.css' %}"/>
+</head>
+<body>
+
+    <!-- Top Banner -->
+    <header class="banner">
+        <h1>Website Banner</h1>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="container">
+
+        <!-- Left Menu -->
+        <nav class="sidebar">
+            <ul>
+                {% block sidenav %}
+                    Menu Items
+                {% endblock sidenav %}
+            </ul>
+            {% if user.is_authenticated %}
+            <div id="cart-section">
+                <h3>Shopping Cart</h3>
+                <div id="cart-items"></div>
+                <div class="cart-total">
+                    Total: $<span id="cart-total">0.00</span>
+                </div>
+            </div>
+            <script src="{% static 'cart.js' %}"></script>
+            {% endif %}
+        </nav>
+
+        <!-- Right Main Content -->
+    <main class="content">
+            {% block content %}
+               <h1>Main Content</h1>
+            {% endblock content %}
+        </main>
+
+    </div>
+
+    <span style="float: right;">
+            {% if user.is_authenticated %}
+               {{ user.username}}
+               <form action="{% url 'logout' %}?next=/" method="post">
+                   <button type="submit">logout</button>
+                   {% csrf_token %}
+               </form>
+            {% else %}
+               Not Logged in
+               <a href="{% url 'login' %}?next=/">login</a>
+            {% endif %}
+        </span>
+
+    <!-- Bottom Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Your Company Name. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
