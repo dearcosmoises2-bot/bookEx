@@ -367,10 +367,34 @@ def aboutus(request):
                   })
 
 def searchbooks(request):
+    q = request.GET.get('q', '').strip()
+    letter = request.GET.get('letter', '').strip().upper()
+
+    letters = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    books = Book.objects.all().order_by("name")
+
+    if q:
+        books = books.filter(name__icontains=q)
+
+    if letter and len(letter) == 1 and letter.isalpha():
+        books = books.filter(name__istartswith=letter)
+    else:
+        letter = ""
+
+    for book in books:
+        try:
+            book.pic_path = book.picture.url[14:]
+        except Exception:
+            book.pic_path = ""
+
     return render(request,
                   'bookMng/searchbooks.html',
                   {
                       'item_list': MainMenu.objects.all(),
+                      'books': books,
+                      'letters': letters,
+                      'selected_letter': letter,
+                      'search_query': q,
                   })
 
 def checkout_success(request):
